@@ -437,5 +437,3 @@ Referensi cepat fitur yang **sengaja tidak dibangun** di MVP:
 5. Seluruh alur (dari daftar akun hingga consume URL mock) dapat diselesaikan **tanpa setup apapun di sisi frontend** selain mengganti base URL dan menambahkan API key di header.
 
 ---
-
-*Dokumen ini adalah hasil keputusan final sesi brainstorming — mencakup semua yang dibahas, direvisi, dan dikunci bersama sebelum fase implementasi dimulai.*
