@@ -1,0 +1,92 @@
+JM_BE/
+├── api/
+│   └── index.js                  ← entry point Vercel (hanya export app)
+│
+├── src/
+│   ├── app.js                    ← setup Express + daftarkan semua routes
+│   │
+│   ├── config/
+│   │   ├── db.js                 ← koneksi MongoDB (cached untuk serverless)
+│   │   └── mailer.js             ← setup Nodemailer
+│   │
+│   ├── models/                   ← semua Mongoose schema (shared)
+│   │   ├── user.model.js
+│   │   ├── project.model.js
+│   │   ├── folder.model.js
+│   │   ├── endpoint.model.js
+│   │   ├── response.model.js
+│   │   ├── toggle.model.js
+│   │   ├── changeRequest.model.js
+│   │   └── contractVersion.model.js
+│   │
+│   ├── modules/                  ← fitur-fitur, masing-masing punya routes+controller+service
+│   │   ├── auth/
+│   │   │   ├── auth.routes.js
+│   │   │   ├── auth.controller.js
+│   │   │   └── auth.service.js
+│   │   │
+│   │   ├── user/                 ← profil, avatar, ganti password, lihat API key
+│   │   │   ├── user.routes.js
+│   │   │   ├── user.controller.js
+│   │   │   └── user.service.js
+│   │   │
+│   │   ├── project/
+│   │   │   ├── project.routes.js
+│   │   │   ├── project.controller.js
+│   │   │   └── project.service.js
+│   │   │
+│   │   ├── member/               ← undang anggota, kelola peran
+│   │   │   ├── member.routes.js
+│   │   │   ├── member.controller.js
+│   │   │   └── member.service.js
+│   │   │
+│   │   ├── folder/
+│   │   │   ├── folder.routes.js
+│   │   │   ├── folder.controller.js
+│   │   │   └── folder.service.js
+│   │   │
+│   │   ├── endpoint/
+│   │   │   ├── endpoint.routes.js
+│   │   │   ├── endpoint.controller.js
+│   │   │   └── endpoint.service.js
+│   │   │
+│   │   ├── response/
+│   │   │   ├── response.routes.js
+│   │   │   ├── response.controller.js
+│   │   │   └── response.service.js
+│   │   │
+│   │   ├── toggle/
+│   │   │   ├── toggle.routes.js
+│   │   │   ├── toggle.controller.js
+│   │   │   └── toggle.service.js
+│   │   │
+│   │   ├── changeRequest/
+│   │   │   ├── changeRequest.routes.js
+│   │   │   ├── changeRequest.controller.js
+│   │   │   └── changeRequest.service.js
+│   │   │
+│   │   ├── mock/                 ← handler URL mock (/mock/:projectId/...)
+│   │   │   ├── mock.routes.js
+│   │   │   ├── mock.controller.js
+│   │   │   └── mock.service.js
+│   │   │
+│   │   └── admin/                ← NEW: super admin panel
+│   │       ├── admin.routes.js
+│   │       ├── admin.controller.js
+│   │       └── admin.service.js
+│   │
+│   ├── middlewares/
+│   │   ├── auth.middleware.js    ← verifikasi JWT (semua route dashboard)
+│   │   ├── admin.middleware.js   ← NEW: cek role superadmin
+│   │   ├── apiKey.middleware.js  ← verifikasi API key (khusus route mock)
+│   │   └── errorHandler.js      ← global error handler
+│   │
+│   └── utils/
+│       ├── apiResponse.js        ← format response standar { success, data, message }
+│       ├── paginate.js           ← helper pagination (skip, limit, totalPages)
+│       └── schemaValidator.js    ← wrapper Ajv untuk validasi request schema
+│
+├── .env
+├── .env.example
+├── .gitignore
+└── package.json
