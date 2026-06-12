@@ -54,6 +54,24 @@ const userSchema = new mongoose.Schema(
         default: 0,
       },
     },
+
+    // hashed SHA-256 dari refresh token — tidak pernah simpan raw token di DB
+    refreshToken: {
+      type: String,
+      default: null,
+    },
+
+    // hashed SHA-256 dari token yang dikirim ke email — tidak pernah simpan raw token di DB
+    resetPasswordToken: {
+      type: String,
+      default: null,
+    },
+
+    // batas waktu token aktif — token dianggap invalid jika Date.now() > resetPasswordExpiry
+    resetPasswordExpiry: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,
