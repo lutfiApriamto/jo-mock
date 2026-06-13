@@ -9,6 +9,8 @@ import errorHandler         from './middlewares/errorHandler.js';
 
 // Modules
 import authRoutes           from './modules/auth/auth.routes.js';
+import projectRoutes        from './modules/project/project.routes.js';
+import memberRoutes         from './modules/member/member.routes.js';
 
 const app = express();
 
@@ -39,7 +41,9 @@ app.use(async (req, res, next) => {
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
 
-app.use('/api/auth', authRoutes);
+app.use('/api/auth',     authRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/projects', memberRoutes);
 
 // ─── Error Handling ───────────────────────────────────────────────────────────
 

@@ -17,7 +17,7 @@ const auth = asyncHandler(async (req, res, next) => {
     return sendError(res, 'Token tidak valid atau sudah expired', 401);
   }
 
-  const user = await User.findById(decoded._id).select('-password');
+  const user = await User.findById(decoded.id).select('-password');
 
   if (!user) {
     return sendError(res, 'Akun tidak ditemukan', 401);

@@ -128,30 +128,3 @@ export const resetPasswordSuccessTemplate = ({ name }) => {
   };
 };
 
-/*
-  LOGIKA PEMROGRAMAN — resetPassword.template.js
-  ------------------------------------------------
-  Template email konfirmasi yang dikirim SETELAH password berhasil direset.
-  Berbeda dari forgotPassword.template.js yang dikirim SEBELUM reset (berisi link).
-
-  Tujuan email konfirmasi ini:
-  1. Memberi tahu user bahwa perubahan berhasil → mereka bisa langsung login
-  2. Sebagai peringatan keamanan — jika bukan user yang melakukan ini,
-     mereka tahu ada aktivitas mencurigakan dan bisa segera bertindak
-
-  changedAt:
-  - Digenerate di saat function dipanggil → mencerminkan waktu server memproses reset
-  - Diformat ke zona waktu Asia/Jakarta (WIB) agar relevan untuk user Indonesia
-  - toLocaleString('id-ID') → format tanggal dalam Bahasa Indonesia
-
-  Elemen desain:
-  - Badge "Berhasil" dengan warna hijau (#17B26A) di atas heading → visual feedback positif
-  - Tabel "Detail Perubahan" → memberi konteks kapan perubahan terjadi
-  - Security warning dengan border merah (#F04438) → peringatan yang mencolok tapi tidak menakutkan
-  - Tidak ada CTA button karena tidak ada aksi yang perlu dilakukan user (hanya informasi)
-
-  Cara pemakaian di auth.service.js:
-    import { resetPasswordSuccessTemplate } from '../../templates/resetPassword.template.js'
-    const { subject, html, text } = resetPasswordSuccessTemplate({ name: user.name })
-    await sendMail({ to: user.email, subject, html, text })
-*/

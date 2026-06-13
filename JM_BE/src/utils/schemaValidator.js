@@ -54,35 +54,3 @@ export const validateRequestBody = (fields, body) => {
   return { valid: true, errors: null };
 };
 
-/*
-  LOGIKA PEMROGRAMAN — schemaValidator.js
-  ----------------------------------------
-  Masalah yang diselesaikan:
-  Ketika FE memanggil URL mock dengan method POST/PUT/PATCH, sistem harus
-  memvalidasi apakah payload yang dikirim sesuai dengan Request Schema yang
-  didefinisikan di kontrak. Library yang dipakai adalah Ajv (JSON Schema validator).
-
-  Ajv({ allErrors: true }):
-  - Instance Ajv dibuat sekali di scope module (singleton) agar tidak dibuat ulang tiap request
-  - allErrors: true → kumpulkan SEMUA error, bukan berhenti di error pertama
-  - Ini agar FE tahu semua field yang bermasalah sekaligus, bukan satu per satu
-
-  fieldToJsonSchema(field):
-  - Mengkonversi satu field dari format internal kita ke format JSON Schema standar
-  - Jika type = 'object' → rekursif ke buildJsonSchema dengan child properties-nya
-  - Jika type = 'array'  → bungkus dengan { type: 'array', items: ... } lalu rekursif lagi
-  - Jika type primitif (string/number/boolean) → langsung return { type: field.type }
-  - Rekursi ini yang memungkinkan nesting field berjalan otomatis
-
-  buildJsonSchema(fields):
-  - Mengkonversi array fields dari DB menjadi JSON Schema lengkap
-  - Memisahkan field yang required ke array 'required' (format JSON Schema)
-  - additionalProperties: true → FE boleh kirim field ekstra, tidak diblokir
-
-  validateRequestBody(fields, body):
-  - Titik masuk utama yang dipanggil dari mock.service.js
-  - Jika endpoint tidak punya requestSchema (fields kosong) → langsung valid, skip validasi
-  - ajv.compile() → compile schema menjadi fungsi validator (di-cache otomatis oleh Ajv)
-  - Hasil error di-map ke format { field, message } agar mudah dibaca FE
-  - instancePath berisi path seperti '/address/city', di-replace '/' menjadi nama field
-*/
