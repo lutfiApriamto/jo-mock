@@ -1,4 +1,3 @@
-
 export const registerSchema = {
   type: 'object',
   required: ['name', 'email', 'password'],

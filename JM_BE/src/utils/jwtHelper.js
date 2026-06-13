@@ -12,7 +12,7 @@ export const verifyToken = (token) => {
     const decoded = jwt.verify(token, SECRET);
     return { valid: true, decoded };
   } catch (err) {
-    return { valid: false, decoded: null, error: err.message };
+    return { valid: false, decoded: null, errorName: err.name };
   }
 };
 

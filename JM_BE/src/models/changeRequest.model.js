@@ -52,6 +52,12 @@ const changeRequestSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+
+    // alasan penolakan dari PM — diisi hanya saat status = 'rejected', null jika diapprove
+    rejectionReason: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,

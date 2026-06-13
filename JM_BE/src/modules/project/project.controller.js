@@ -15,7 +15,7 @@ export const listProjects = asyncHandler(async (req, res) => {
     userId: req.user._id,
     query:  req.query,
   });
-  sendSuccess(res, { projects, meta }, 'Daftar project berhasil diambil');
+  sendSuccess(res, projects, 'Daftar project berhasil diambil', 200, meta);
 });
 
 export const getProjectDetail = asyncHandler(async (req, res) => {
@@ -31,5 +31,12 @@ export const updateProject = asyncHandler(async (req, res) => {
 export const deleteProject = asyncHandler(async (req, res) => {
   await projectService.deleteProject(req.params.projectId);
   sendSuccess(res, null, 'Project berhasil dihapus');
+});
+
+// Cari project milik user berdasarkan nama.
+// GET /api/projects/search?q=keyword
+export const searchProjects = asyncHandler(async (req, res) => {
+  const projects = await projectService.searchProjects({ userId: req.user._id, q: req.query.q });
+  sendSuccess(res, projects, `Ditemukan ${projects.length} project yang sesuai`);
 });
 

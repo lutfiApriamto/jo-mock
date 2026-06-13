@@ -8,11 +8,11 @@ const validate = (schema) => (req, res, next) => {
   const valid      = validateFn(req.body);
 
   if (!valid) {
-    const errors = validateFn.errors.map((err) => ({
-      field:   err.instancePath.replace('/', '') || err.params?.missingProperty || 'unknown',
-      message: err.message,
-    }));
-    return sendError(res, 'Data yang dikirim tidak valid', 400, errors);
+    const errors = validateFn.errors.map((err) => {
+      const field = err.instancePath.replace('/', '') || err.params?.missingProperty || 'unknown';
+      return { message: `${field}: ${err.message}`, code: 400 };
+    });
+    return sendError(res, 'Data yang dikirim tidak valid', 400, errors, 'ValidationError');
   }
 
   next();

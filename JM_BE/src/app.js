@@ -11,6 +11,16 @@ import errorHandler         from './middlewares/errorHandler.js';
 import authRoutes           from './modules/auth/auth.routes.js';
 import projectRoutes        from './modules/project/project.routes.js';
 import memberRoutes         from './modules/member/member.routes.js';
+import folderRoutes         from './modules/folder/folder.routes.js';
+import endpointRoutes       from './modules/endpoint/endpoint.routes.js';
+import responseRoutes       from './modules/response/response.routes.js';
+import toggleRoutes         from './modules/toggle/toggle.routes.js';
+import mockRoutes           from './modules/mock/mock.routes.js';
+import userRoutes           from './modules/user/user.routes.js';
+import changeRequestRoutes    from './modules/changeRequest/changeRequest.routes.js';
+import contractVersionRoutes  from './modules/contractVersion/contractVersion.routes.js';
+import invitationRoutes       from './modules/invitation/invitation.routes.js';
+import adminRoutes            from './modules/admin/admin.routes.js';
 
 const app = express();
 
@@ -42,8 +52,25 @@ app.use(async (req, res, next) => {
 // ─── Routes ───────────────────────────────────────────────────────────────────
 
 app.use('/api/auth',     authRoutes);
+app.use('/api/users',    userRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/projects', memberRoutes);
+app.use('/api/projects', folderRoutes);
+app.use('/api/projects', endpointRoutes);
+app.use('/api/projects', responseRoutes);
+app.use('/api/projects', toggleRoutes);
+app.use('/api/projects', changeRequestRoutes);
+app.use('/api/projects', contractVersionRoutes);
+
+// Invitation — public + auth routes untuk accept/decline undangan project
+app.use('/api/invitations', invitationRoutes);
+
+// Admin — superadmin only
+app.use('/api/admin', adminRoutes);
+
+// Mock server — diakses via API key, bukan JWT.
+// Mount terpisah di /mock agar tidak tercampur dengan route dashboard /api/projects.
+app.use('/mock', mockRoutes);
 
 // ─── Error Handling ───────────────────────────────────────────────────────────
 
@@ -52,55 +79,3 @@ app.use(errorHandler);
 
 export default app;
 
-/*
-  LOGIKA PEMROGRAMAN — app.js
-  ----------------------------
-  File ini adalah titik pusat Express — tempat semua middleware dan route dikonfigurasi.
-  app.js hanya mengekspor `app` (Express instance), bukan server HTTP.
-  Server HTTP dibuat di api/index.js (Vercel) atau bisa dibuatkan server.js terpisah untuk dev lokal.
-
-  Urutan middleware PENTING — Express memproses dari atas ke bawah:
-
-  1. cors():
-     - Mengizinkan request dari FE origin (CLIENT_URL = http://localhost:5173 saat dev)
-     - Harus di atas semua route agar OPTIONS preflight request dijawab sebelum menyentuh logic
-     - credentials: true → diperlukan jika FE kirim cookies atau Authorization header
-
-  2. express.json() + express.urlencoded():
-     - Memparse body request menjadi JavaScript object (tersedia via req.body)
-     - Harus ada sebelum route mana pun yang membaca req.body
-     - urlencoded({ extended: false }) → support form submission biasa
-
-  3. mongoSanitizer:
-     - Hapus/replace karakter MongoDB operator ($, .) dari req.body dan req.query
-     - Mencegah NoSQL injection attack
-     - Dijalankan setelah body parse agar req.body sudah tersedia
-
-  4. xssSanitizer:
-     - Filter karakter HTML berbahaya dari semua string di req.body dan req.query
-     - Dijalankan setelah mongoSanitizer
-     - CATATAN: Jangan pasang xssSanitizer di route mock (akan ditambahkan nanti)
-       karena akan merusak response body JSON yang user definisikan
-
-  5. connectDB (per-request middleware):
-     - Di lingkungan serverless (Vercel), koneksi DB tidak dijamin persistent antar request
-     - Memanggil connectDB() di setiap request memastikan koneksi selalu ada
-     - Koneksi di-cache di global.mongoose — bukan buat koneksi baru setiap kali
-     - Jika koneksi gagal → error diteruskan ke errorHandler via next()
-
-  6. Routes (/api/...):
-     - Semua route diprefix /api untuk memisahkan dari static files atau path lain
-     - Setiap module punya routenya sendiri dan diimport di sini
-
-  7. notFound:
-     - Harus setelah semua route — menangkap request yang tidak cocok dengan route manapun
-     - Mengembalikan 404 JSON (bukan HTML default Express)
-
-  8. errorHandler:
-     - Harus PALING TERAKHIR — Express mengenali error handler dari 4 parameter
-     - Menangkap semua error yang di-throw di dalam asyncHandler atau next(err) manual
-
-  Cara tambah module baru:
-    import projectRoutes from './modules/project/project.routes.js'
-    app.use('/api/projects', projectRoutes)  // tambahkan sebelum notFound
-*/

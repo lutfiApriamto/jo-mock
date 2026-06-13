@@ -12,6 +12,10 @@ router.use(auth);
 // POST /api/projects — buat project baru (semua user login)
 router.post('/', validate(schema.createProjectSchema), ctrl.createProject);
 
+// GET /api/projects/search?q=keyword — cari project berdasarkan nama
+// Diletakkan sebelum /:projectId agar 'search' tidak diinterpretasikan sebagai ObjectId
+router.get('/search', ctrl.searchProjects);
+
 // GET /api/projects — list project milik user (sebagai owner atau member)
 router.get('/', ctrl.listProjects);
 

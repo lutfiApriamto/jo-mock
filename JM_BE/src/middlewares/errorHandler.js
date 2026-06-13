@@ -3,15 +3,17 @@ import { sendError } from '../utils/apiResponse.js';
 const errorHandler = (err, req, res, next) => {
   let statusCode = err.statusCode || 500;
   let message    = err.message    || 'Terjadi kesalahan pada server';
-  let errors     = null;
+  // Jika service layer sudah menyiapkan array errors (mis. validasi field-level di mock),
+  // teruskan langsung. Blok khusus di bawah akan menimpa ini jika perlu.
+  let errors     = Array.isArray(err.errors) ? err.errors : null;
 
   // Mongoose: validasi schema gagal (mis. field required tidak diisi)
   if (err.name === 'ValidationError') {
     statusCode = 400;
     message    = 'Validasi data gagal';
     errors     = Object.values(err.errors).map((e) => ({
-      field:   e.path,
-      message: e.message,
+      message: `${e.path}: ${e.message}`,
+      code:    400,
     }));
   }
 
@@ -41,7 +43,8 @@ const errorHandler = (err, req, res, next) => {
     message    = 'Token sudah expired, silakan login ulang';
   }
 
-  sendError(res, message, statusCode, errors);
+  const errorType = err.name === 'ValidationError' ? 'ValidationError' : undefined;
+  sendError(res, message, statusCode, errors, errorType);
 };
 
 export default errorHandler;

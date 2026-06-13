@@ -1,5 +1,3 @@
-import User from '../../models/user.model.js';
-
 // Format list: owner selalu muncul pertama sebagai PM, lalu anggota lainnya
 const formatMembers = (project) => {
   const owner = {
@@ -20,35 +18,6 @@ const formatMembers = (project) => {
 };
 
 export const listMembers = async (project) => {
-  await project.populate('ownerId', 'name email avatar');
-  await project.populate('members.userId', 'name email avatar');
-  return formatMembers(project);
-};
-
-export const addMember = async (project, { userId, role }) => {
-  const userExists = await User.exists({ _id: userId });
-  if (!userExists) {
-    const err = new Error('User tidak ditemukan');
-    err.statusCode = 404;
-    throw err;
-  }
-
-  if (project.ownerId.toString() === userId) {
-    const err = new Error('Owner project sudah otomatis memiliki akses sebagai PM');
-    err.statusCode = 409;
-    throw err;
-  }
-
-  const alreadyMember = project.members.some((m) => m.userId.toString() === userId);
-  if (alreadyMember) {
-    const err = new Error('User sudah menjadi anggota project ini');
-    err.statusCode = 409;
-    throw err;
-  }
-
-  project.members.push({ userId, role });
-  await project.save();
-
   await project.populate('ownerId', 'name email avatar');
   await project.populate('members.userId', 'name email avatar');
   return formatMembers(project);
@@ -94,3 +63,43 @@ export const removeMember = async (project, targetUserId) => {
   await project.save();
 };
 
+// Transfer kepemilikan project ke member yang ada.
+// Hanya bisa dilakukan oleh owner (bukan sekedar PM role) — dicek dari ownerId.
+// Alur:
+//   1. Pastikan caller adalah owner sesungguhnya
+//   2. Target harus member aktif project ini
+//   3. Old owner ditambahkan ke members sebagai PM
+//   4. New owner dihapus dari members, ownerId diperbarui
+export const transferOwnership = async (project, currentUserId, { userId: newOwnerId }) => {
+  if (project.ownerId.toString() !== currentUserId.toString()) {
+    const err = new Error('Hanya owner project yang dapat melakukan transfer kepemilikan');
+    err.statusCode = 403;
+    throw err;
+  }
+
+  if (project.ownerId.toString() === newOwnerId) {
+    const err = new Error('Anda sudah menjadi owner project ini');
+    err.statusCode = 409;
+    throw err;
+  }
+
+  const targetIndex = project.members.findIndex((m) => m.userId.toString() === newOwnerId);
+  if (targetIndex === -1) {
+    const err = new Error('Target user bukan anggota project ini. Hanya member aktif yang dapat menjadi owner baru.');
+    err.statusCode = 404;
+    throw err;
+  }
+
+  // Hapus target dari members, jadikan owner
+  project.members.splice(targetIndex, 1);
+
+  // Tambahkan old owner ke members sebagai PM
+  project.members.push({ userId: currentUserId, role: 'PM' });
+
+  project.ownerId = newOwnerId;
+  await project.save();
+
+  await project.populate('ownerId', 'name email avatar');
+  await project.populate('members.userId', 'name email avatar');
+  return formatMembers(project);
+};

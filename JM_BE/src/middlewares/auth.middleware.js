@@ -10,11 +10,14 @@ const auth = asyncHandler(async (req, res, next) => {
     return sendError(res, 'Token tidak ditemukan', 401);
   }
 
-  const token          = authHeader.split(' ')[1];
-  const { valid, decoded } = verifyToken(token);
+  const token                      = authHeader.split(' ')[1];
+  const { valid, decoded, errorName } = verifyToken(token);
 
   if (!valid) {
-    return sendError(res, 'Token tidak valid atau sudah expired', 401);
+    const message = errorName === 'TokenExpiredError'
+      ? 'Access token sudah expired, silakan refresh token'
+      : 'Token tidak valid atau telah dirusak';
+    return sendError(res, message, 401);
   }
 
   const user = await User.findById(decoded.id).select('-password');
