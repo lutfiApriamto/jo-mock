@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <title>JO-MOCK</title>
+  <desc>Logo JO-MOCK untuk dark mode — tile gelap dengan monogram JO indigo.</desc>
+
+  <!-- Background tile (dark surface) -->
+  <rect x="0" y="0" width="200" height="200" rx="45" fill="#100E18"/>
+
+  <!-- O — main ring (indigo primary) -->
+  <circle cx="100" cy="100" r="67" fill="none" stroke="#6C5CE7" stroke-width="20"/>
+
+  <!-- O — ghost arc accent (lighter indigo) -->
+  <circle cx="100" cy="100" r="67" fill="none" stroke="#A29BFF" stroke-width="20"
+          stroke-dasharray="46 374" stroke-dashoffset="-30"
+          stroke-linecap="butt" opacity="0.65"/>
+
+  <!-- J — vertical bar -->
+  <rect x="112" y="66" width="20" height="46" rx="3" fill="#6C5CE7"/>
+
+  <!-- J — bottom hook -->
+  <path d="M 112 110 a 10 10 0 0 1 -30 0" fill="none" stroke="#6C5CE7"
+        stroke-width="20" stroke-linecap="butt"/>
+</svg>

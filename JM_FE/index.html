@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8" />
+
+  <!-- Favicon — adaptive light/dark mengikuti preferensi sistem -->
+  <link rel="icon" type="image/svg+xml" href="/jomock-light.svg" media="(prefers-color-scheme: light)" />
+  <link rel="icon" type="image/svg+xml" href="/jomock-dark.svg" media="(prefers-color-scheme: dark)" />
+  <link rel="apple-touch-icon" href="/jomock-light.svg" />
+
+  <!-- Viewport & PWA -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
+  <meta name="theme-color" content="#F7F7FB" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#100E18" media="(prefers-color-scheme: dark)" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://jomock.app/" />
+
+  <!-- Google Fonts — non-blocking preload -->
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&family=Space+Mono:wght@400&display=swap"
+    onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&family=Space+Mono:wght@400&display=swap" />
+  </noscript>
+
+  <!-- Primary Meta Tags -->
+  <title>JO-MOCK — Joint Operations Mock</title>
+  <meta name="title" content="JO-MOCK — Joint Operations Mock" />
+  <meta name="description" content="Platform API mocking berorientasi kontrak untuk kolaborasi frontend, backend, dan PM. Mock server siap pakai — frontend langsung kerja tanpa menunggu backend." />
+  <meta name="keywords" content="API Mocking, Contract-First API, Mock Server, Developer Collaboration, Frontend Development, JO-MOCK, Joint Operations Mock" />
+  <meta name="author" content="Muhammad Lutfi Apriamto" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://jomock.app/" />
+  <meta property="og:title" content="JO-MOCK — Joint Operations Mock" />
+  <meta property="og:description" content="Platform API mocking berorientasi kontrak. Frontend langsung kerja tanpa menunggu backend — cukup ganti base URL saat backend siap." />
+  <meta property="og:image" content="/jomock-light.svg" />
+
+  <!-- Twitter Card -->
+  <meta property="twitter:card" content="summary" />
+  <meta property="twitter:url" content="https://jomock.app/" />
+  <meta property="twitter:title" content="JO-MOCK — Joint Operations Mock" />
+  <meta property="twitter:description" content="Platform API mocking berorientasi kontrak. Frontend langsung kerja tanpa menunggu backend — cukup ganti base URL saat backend siap." />
+  <meta property="twitter:image" content="/jomock-light.svg" />
+
+  <!--
+    Inline script: apply theme SEBELUM React mount.
+    Mencegah "flash of wrong theme" — layar tidak sempat tampil dengan warna salah.
+  -->
+  <script>
+    (function () {
+      var stored = localStorage.getItem('theme');
+      var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.classList.add(theme);
+    })();
+  </script>
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
+</html>
