@@ -3,7 +3,7 @@
  * @param {{ name: string, resetUrl: string }} params
  */
 export const forgotPasswordTemplate = ({ name, resetUrl }) => ({
-  subject: 'Reset Your Password — JO-MOCK',
+  subject: 'Reset Your Password',
 
   text: `Hello ${name},\n\nUse the link below to reset your JO-MOCK account password:\n${resetUrl}\n\nThis link expires in 1 hour. If you didn't request this, you can safely ignore this email.\n\n— The JO-MOCK Team`,
 
@@ -12,7 +12,7 @@ export const forgotPasswordTemplate = ({ name, resetUrl }) => ({
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reset Your Password — JO-MOCK</title>
+  <title>Reset Your Password</title>
 </head>
 <body style="margin:0;padding:0;background-color:#F4F3FB;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F4F3FB;padding:48px 20px;">

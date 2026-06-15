@@ -14,7 +14,7 @@ export const resetPasswordSuccessTemplate = ({ name }) => {
   });
 
   return {
-    subject: 'Your Password Has Been Changed — JO-MOCK',
+    subject: 'Your Password Has Been Changed',
 
     text: `Hello ${name},\n\nYour JO-MOCK account password was successfully changed on ${changedAt} UTC.\n\nIf you didn't make this change, please contact the JO-MOCK team immediately.\n\n— The JO-MOCK Team`,
 
@@ -23,7 +23,7 @@ export const resetPasswordSuccessTemplate = ({ name }) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Password Has Been Changed — JO-MOCK</title>
+  <title>Your Password Has Been Changed</title>
 </head>
 <body style="margin:0;padding:0;background-color:#F4F3FB;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F4F3FB;padding:48px 20px;">
