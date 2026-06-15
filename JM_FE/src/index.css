@@ -3,7 +3,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme inline {
+@theme {
   /* ── Typography ─────────────────────────────────────────── */
   --font-heading: 'Space Grotesk', sans-serif;
   --font-body:    'IBM Plex Sans', sans-serif;
@@ -96,4 +96,14 @@ h1, h2, h3, h4, h5, h6 {
 
 code, pre, kbd {
   font-family: var(--font-mono);
+}
+
+/* ── Smooth theme transition ──────────────────────────────── */
+/* Applies to color-related props only; explicit transition classes (Tailwind) override this */
+*,
+*::before,
+*::after {
+  transition-property: color, background-color, border-color, box-shadow, fill, stroke;
+  transition-timing-function: ease;
+  transition-duration: 220ms;
 }

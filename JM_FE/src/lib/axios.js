@@ -45,11 +45,11 @@ api.interceptors.response.use(
 
       try {
         const { data } = await axios.post(
-          `${import.meta.env.VITE_API_URL}/api/auth/refresh`,
+          `${import.meta.env.VITE_API_URL}/auth/refresh`,
           {},
           { withCredentials: true }
         )
-        const newToken = data.data.accessToken
+        const newToken = data.data.data.accessToken
         useAuthStore.getState().setAccessToken(newToken)
         processQueue(null, newToken)
         original.headers.Authorization = `Bearer ${newToken}`

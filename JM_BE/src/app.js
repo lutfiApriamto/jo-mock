@@ -3,7 +3,7 @@ import express              from 'express';
 import cors                 from 'cors';
 import cookieParser         from 'cookie-parser';
 import connectDB            from './config/db.js';
-import { mongoSanitizer, xssSanitizer } from './middlewares/sanitizer.middleware.js';
+import { sanitizer }        from './middlewares/sanitizer.middleware.js';
 import notFound             from './middlewares/notFound.middleware.js';
 import errorHandler         from './middlewares/errorHandler.js';
 
@@ -35,8 +35,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(mongoSanitizer);
-app.use(xssSanitizer);
+app.use(sanitizer);
 
 // ─── Database ─────────────────────────────────────────────────────────────────
 
@@ -44,7 +43,8 @@ app.use(async (req, res, next) => {
   try {
     await connectDB();
     next();
-  } catch {
+  } catch (err) {
+    console.error('[DB] Koneksi gagal:', err.message);
     next(new Error('Koneksi database gagal'));
   }
 });

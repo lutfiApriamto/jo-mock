@@ -1,23 +1,18 @@
-import { Router }    from 'express';
-import rateLimit      from 'express-rate-limit';
-import validate       from '../../middlewares/validate.middleware.js';
-import * as schema    from './auth.schema.js';
-import * as ctrl      from './auth.controller.js';
+import { Router }         from 'express';
+import { createRateLimiter } from '../../middlewares/rateLimiter.middleware.js';
+import validate            from '../../middlewares/validate.middleware.js';
+import * as schema         from './auth.schema.js';
+import * as ctrl           from './auth.controller.js';
 
 const router = Router();
 
 // Rate limiter untuk endpoint sensitif: max 10 request per 15 menit per IP.
 // Melindungi dari brute-force login, spam register, dan spam forgot-password.
-const authLimiter = rateLimit({
-  windowMs:          15 * 60 * 1000, // 15 menit
-  max:               10,
-  standardHeaders:   true,
-  legacyHeaders:     false,
-  message: {
-    errorStatus: true,
-    errorType:   'TooManyRequests',
-    errors:      [{ message: 'Terlalu banyak percobaan. Silakan coba lagi setelah 15 menit.', code: 429 }],
-  },
+// Otomatis di-skip saat development (lihat createRateLimiter).
+const authLimiter = createRateLimiter({
+  windowMs: 15 * 60 * 1000, // 15 menit
+  max:      10,
+  message:  'Terlalu banyak percobaan. Silakan coba lagi setelah 15 menit.',
 });
 
 // POST /api/auth/register — daftar akun user biasa

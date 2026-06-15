@@ -1,28 +1,29 @@
 /**
- * Template email konfirmasi setelah password berhasil direset.
+ * Confirmation email sent after a password has been successfully reset.
  * @param {{ name: string }} params
  */
 export const resetPasswordSuccessTemplate = ({ name }) => {
-  const changedAt = new Date().toLocaleString('id-ID', {
-    timeZone: 'Asia/Jakarta',
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+  const changedAt = new Date().toLocaleString('en-US', {
+    timeZone: 'UTC',
+    day:      '2-digit',
+    month:    'long',
+    year:     'numeric',
+    hour:     '2-digit',
+    minute:   '2-digit',
+    hour12:   true,
   });
 
   return {
-    subject: 'Password Berhasil Diubah — JO-MOCK',
+    subject: 'Your Password Has Been Changed — JO-MOCK',
 
-    text: `Halo ${name},\n\nPassword akun JO-MOCK Anda telah berhasil diubah pada ${changedAt} WIB.\n\nJika Anda tidak melakukan perubahan ini, segera hubungi tim JO-MOCK.\n\n— Tim JO-MOCK`,
+    text: `Hello ${name},\n\nYour JO-MOCK account password was successfully changed on ${changedAt} UTC.\n\nIf you didn't make this change, please contact the JO-MOCK team immediately.\n\n— The JO-MOCK Team`,
 
     html: `<!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Password Berhasil Diubah — JO-MOCK</title>
+  <title>Your Password Has Been Changed — JO-MOCK</title>
 </head>
 <body style="margin:0;padding:0;background-color:#F4F3FB;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F4F3FB;padding:48px 20px;">
@@ -46,7 +47,7 @@ export const resetPasswordSuccessTemplate = ({ name }) => {
                 <tr>
                   <td style="background-color:#ECFDF3;border:1px solid #ABEFC6;border-radius:100px;padding:6px 16px;">
                     <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;color:#17B26A;letter-spacing:0.5px;text-transform:uppercase;">
-                      &#10003;&nbsp; Berhasil
+                      &#10003;&nbsp; Success
                     </p>
                   </td>
                 </tr>
@@ -58,32 +59,32 @@ export const resetPasswordSuccessTemplate = ({ name }) => {
           <tr>
             <td style="background-color:#FFFFFF;padding:20px 40px 40px;border-left:1px solid #E5E1EF;border-right:1px solid #E5E1EF;">
 
-              <h1 style="margin:0 0 16px;font-family:'Trebuchet MS',Georgia,serif;font-size:22px;font-weight:700;color:#1A1726;line-height:1.3;">Password Anda berhasil diubah</h1>
+              <h1 style="margin:0 0 16px;font-family:'Trebuchet MS',Georgia,serif;font-size:22px;font-weight:700;color:#1A1726;line-height:1.3;">Your password has been changed</h1>
 
               <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#5B5870;">
-                Halo, <strong style="color:#1A1726;">${name}</strong>!
+                Hello, <strong style="color:#1A1726;">${name}</strong>!
               </p>
               <p style="margin:0 0 28px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#5B5870;">
-                Password akun JO-MOCK Anda telah berhasil diperbarui. Anda sekarang bisa login menggunakan password baru Anda.
+                Your JO-MOCK account password has been successfully updated. You can now log in using your new password.
               </p>
 
-              <!-- DETAIL PERUBAHAN -->
+              <!-- CHANGE DETAILS -->
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;border:1px solid #E5E1EF;border-radius:8px;overflow:hidden;">
                 <tr>
                   <td style="padding:16px 20px;background-color:#FAFAFA;border-bottom:1px solid #E5E1EF;">
-                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;color:#8B889C;letter-spacing:0.8px;text-transform:uppercase;">Detail Perubahan</p>
+                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;color:#8B889C;letter-spacing:0.8px;text-transform:uppercase;">Change Details</p>
                   </td>
                 </tr>
                 <tr>
                   <td style="padding:16px 20px;">
                     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                       <tr>
-                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;width:120px;padding-bottom:8px;">Aksi</td>
-                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;padding-bottom:8px;">Reset Password</td>
+                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;width:120px;padding-bottom:8px;">Action</td>
+                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;padding-bottom:8px;">Password Reset</td>
                       </tr>
                       <tr>
-                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;">Waktu</td>
-                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;">${changedAt} WIB</td>
+                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;">Time</td>
+                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;">${changedAt} UTC</td>
                       </tr>
                     </table>
                   </td>
@@ -95,16 +96,16 @@ export const resetPasswordSuccessTemplate = ({ name }) => {
                 <tr>
                   <td style="background-color:#FFF9F9;border-left:3px solid #F04438;border-radius:0 6px 6px 0;padding:12px 16px;">
                     <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5B5870;line-height:1.6;">
-                      <strong style="color:#1A1726;">Bukan Anda yang melakukan ini?</strong><br>
-                      Jika Anda tidak mereset password, akun Anda mungkin dalam bahaya. Segera hubungi tim JO-MOCK atau gunakan fitur "Lupa Password" untuk mengambil alih akun.
+                      <strong style="color:#1A1726;">Wasn't you?</strong><br>
+                      If you didn't reset your password, your account may be at risk. Use the "Forgot Password" feature immediately to regain access, or contact the JO-MOCK team.
                     </p>
                   </td>
                 </tr>
               </table>
 
               <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#5B5870;">
-                Salam,<br>
-                <strong style="color:#1A1726;">Tim JO-MOCK</strong>
+                Best,<br>
+                <strong style="color:#1A1726;">The JO-MOCK Team</strong>
               </p>
 
             </td>
@@ -127,4 +128,3 @@ export const resetPasswordSuccessTemplate = ({ name }) => {
 </html>`,
   };
 };
-

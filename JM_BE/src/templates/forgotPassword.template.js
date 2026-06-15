@@ -1,18 +1,18 @@
 /**
- * Template email untuk permintaan reset password.
+ * Email template for password reset requests.
  * @param {{ name: string, resetUrl: string }} params
  */
 export const forgotPasswordTemplate = ({ name, resetUrl }) => ({
-  subject: 'Reset Password — JO-MOCK',
+  subject: 'Reset Your Password — JO-MOCK',
 
-  text: `Halo ${name},\n\nGunakan link berikut untuk mereset password akun JO-MOCK Anda:\n${resetUrl}\n\nLink ini aktif selama 1 jam. Jika Anda tidak meminta ini, abaikan email ini.\n\n— Tim JO-MOCK`,
+  text: `Hello ${name},\n\nUse the link below to reset your JO-MOCK account password:\n${resetUrl}\n\nThis link expires in 1 hour. If you didn't request this, you can safely ignore this email.\n\n— The JO-MOCK Team`,
 
   html: `<!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reset Password — JO-MOCK</title>
+  <title>Reset Your Password — JO-MOCK</title>
 </head>
 <body style="margin:0;padding:0;background-color:#F4F3FB;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F4F3FB;padding:48px 20px;">
@@ -33,13 +33,13 @@ export const forgotPasswordTemplate = ({ name, resetUrl }) => ({
           <tr>
             <td style="background-color:#FFFFFF;padding:40px;border-left:1px solid #E5E1EF;border-right:1px solid #E5E1EF;">
 
-              <h1 style="margin:0 0 16px;font-family:'Trebuchet MS',Georgia,serif;font-size:22px;font-weight:700;color:#1A1726;line-height:1.3;">Reset password Anda</h1>
+              <h1 style="margin:0 0 16px;font-family:'Trebuchet MS',Georgia,serif;font-size:22px;font-weight:700;color:#1A1726;line-height:1.3;">Reset your password</h1>
 
               <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#5B5870;">
-                Halo, <strong style="color:#1A1726;">${name}</strong>!
+                Hello, <strong style="color:#1A1726;">${name}</strong>!
               </p>
               <p style="margin:0 0 32px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#5B5870;">
-                Kami menerima permintaan untuk mereset password akun JO-MOCK Anda. Klik tombol di bawah untuk membuat password baru.
+                We received a request to reset your JO-MOCK account password. Click the button below to create a new password.
               </p>
 
               <!-- CTA BUTTON -->
@@ -59,7 +59,7 @@ export const forgotPasswordTemplate = ({ name, resetUrl }) => ({
                 <tr>
                   <td style="background-color:#F4F3FB;border-left:3px solid #6C5CE7;border-radius:0 6px 6px 0;padding:12px 16px;">
                     <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5B5870;line-height:1.6;">
-                      Link ini akan kedaluwarsa dalam <strong style="color:#1A1726;">1 jam</strong> sejak email ini dikirim.
+                      This link will expire in <strong style="color:#1A1726;">1 hour</strong> from the time this email was sent.
                     </p>
                   </td>
                 </tr>
@@ -67,12 +67,12 @@ export const forgotPasswordTemplate = ({ name, resetUrl }) => ({
 
               <!-- SECURITY NOTE -->
               <p style="margin:0 0 28px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.7;color:#8B889C;">
-                Jika Anda tidak meminta reset password ini, abaikan email ini. Password Anda tidak akan berubah dan tidak ada tindakan lebih lanjut yang diperlukan.
+                If you didn't request a password reset, you can safely ignore this email. Your password will remain unchanged and no further action is required.
               </p>
 
               <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#5B5870;">
-                Salam,<br>
-                <strong style="color:#1A1726;">Tim JO-MOCK</strong>
+                Best,<br>
+                <strong style="color:#1A1726;">The JO-MOCK Team</strong>
               </p>
 
             </td>
@@ -82,7 +82,7 @@ export const forgotPasswordTemplate = ({ name, resetUrl }) => ({
           <tr>
             <td style="background-color:#FAFAFA;border:1px solid #E5E1EF;border-top:none;border-radius:0 0 12px 12px;padding:24px 40px;">
               <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#8B889C;text-align:center;">
-                Tombol tidak berfungsi? Salin link berikut ke browser Anda:
+                Button not working? Copy the link below into your browser:
               </p>
               <p style="margin:0 0 16px;font-family:'Courier New',Courier,monospace;font-size:11px;color:#6C5CE7;text-align:center;word-break:break-all;">
                 ${resetUrl}
