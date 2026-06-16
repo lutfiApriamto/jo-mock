@@ -1,8 +1,12 @@
 const formatDate = () =>
-  new Date().toLocaleString('id-ID', {
-    timeZone: 'Asia/Jakarta',
-    day: '2-digit', month: 'long', year: 'numeric',
-    hour: '2-digit', minute: '2-digit',
+  new Date().toLocaleString('en-US', {
+    timeZone: 'UTC',
+    day:      '2-digit',
+    month:    'long',
+    year:     'numeric',
+    hour:     '2-digit',
+    minute:   '2-digit',
+    hour12:   true,
   });
 
 const baseHeader = `
@@ -25,7 +29,7 @@ const baseFooter = (year) => `
   </table>`;
 
 /**
- * Dikirim ke EMAIL LAMA — memberi tahu bahwa email akun telah diganti.
+ * Sent to the OLD email — notifies that the account email has been changed.
  * @param {{ name: string, newEmail: string }} params
  */
 export const emailChangeOldTemplate = ({ name, newEmail }) => {
@@ -33,16 +37,16 @@ export const emailChangeOldTemplate = ({ name, newEmail }) => {
   const year      = new Date().getFullYear();
 
   return {
-    subject: 'Peringatan: Email Akun Anda Telah Diubah — JO-MOCK',
+    subject: 'Security Alert: Your Account Email Has Been Changed',
 
-    text: `Halo ${name},\n\nEmail akun JO-MOCK Anda telah berhasil diubah ke ${newEmail} pada ${changedAt} WIB.\n\nJika Anda tidak melakukan perubahan ini, segera gunakan fitur "Lupa Password" atau hubungi tim JO-MOCK.\n\n— Tim JO-MOCK`,
+    text: `Hello ${name},\n\nYour JO-MOCK account email has been successfully changed to ${newEmail} on ${changedAt} UTC.\n\nIf you didn't make this change, immediately use the "Forgot Password" feature or contact the JO-MOCK team.\n\n— The JO-MOCK Team`,
 
     html: `<!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Peringatan: Email Akun Diubah — JO-MOCK</title>
+  <title>Security Alert: Account Email Changed</title>
 </head>
 <body style="margin:0;padding:0;background-color:#F4F3FB;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F4F3FB;padding:48px 20px;">
@@ -57,7 +61,7 @@ export const emailChangeOldTemplate = ({ name, newEmail }) => {
               <tr>
                 <td style="background-color:#FFF9F9;border:1px solid #FECDD3;border-radius:100px;padding:6px 16px;">
                   <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;color:#E11D48;letter-spacing:0.5px;text-transform:uppercase;">
-                    &#9888;&nbsp; Peringatan Keamanan
+                    &#9888;&nbsp; Security Alert
                   </p>
                 </td>
               </tr>
@@ -69,36 +73,36 @@ export const emailChangeOldTemplate = ({ name, newEmail }) => {
         <tr>
           <td style="background-color:#FFFFFF;padding:20px 40px 40px;border-left:1px solid #E5E1EF;border-right:1px solid #E5E1EF;">
 
-            <h1 style="margin:0 0 16px;font-family:'Trebuchet MS',Georgia,serif;font-size:22px;font-weight:700;color:#1A1726;line-height:1.3;">Email akun Anda telah diubah</h1>
+            <h1 style="margin:0 0 16px;font-family:'Trebuchet MS',Georgia,serif;font-size:22px;font-weight:700;color:#1A1726;line-height:1.3;">Your account email has been changed</h1>
 
             <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#5B5870;">
-              Halo, <strong style="color:#1A1726;">${name}</strong>!
+              Hello, <strong style="color:#1A1726;">${name}</strong>!
             </p>
             <p style="margin:0 0 28px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#5B5870;">
-              Email akun JO-MOCK Anda baru saja berhasil diubah. Email baru akan digunakan untuk login dan menerima notifikasi selanjutnya.
+              Your JO-MOCK account email has just been successfully updated. The new email will be used for login and future notifications.
             </p>
 
-            <!-- DETAIL PERUBAHAN -->
+            <!-- CHANGE DETAILS -->
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;border:1px solid #E5E1EF;border-radius:8px;overflow:hidden;">
               <tr>
                 <td style="padding:14px 20px;background-color:#FAFAFA;border-bottom:1px solid #E5E1EF;">
-                  <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;color:#8B889C;letter-spacing:0.8px;text-transform:uppercase;">Detail Perubahan</p>
+                  <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;color:#8B889C;letter-spacing:0.8px;text-transform:uppercase;">Change Details</p>
                 </td>
               </tr>
               <tr>
                 <td style="padding:16px 20px;">
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                     <tr>
-                      <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;width:110px;padding-bottom:10px;vertical-align:top;">Aksi</td>
-                      <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;padding-bottom:10px;">Ganti Email</td>
+                      <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;width:110px;padding-bottom:10px;vertical-align:top;">Action</td>
+                      <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;padding-bottom:10px;">Email Change</td>
                     </tr>
                     <tr>
-                      <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;padding-bottom:10px;vertical-align:top;">Email Baru</td>
+                      <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;padding-bottom:10px;vertical-align:top;">New Email</td>
                       <td style="font-family:'Courier New',Courier,monospace;font-size:13px;color:#6C5CE7;font-weight:600;padding-bottom:10px;">${newEmail}</td>
                     </tr>
                     <tr>
-                      <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;vertical-align:top;">Waktu</td>
-                      <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;">${changedAt} WIB</td>
+                      <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;vertical-align:top;">Time</td>
+                      <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;">${changedAt} UTC</td>
                     </tr>
                   </table>
                 </td>
@@ -110,16 +114,16 @@ export const emailChangeOldTemplate = ({ name, newEmail }) => {
               <tr>
                 <td style="background-color:#FFF9F9;border-left:3px solid #F04438;border-radius:0 6px 6px 0;padding:14px 16px;">
                   <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5B5870;line-height:1.6;">
-                    <strong style="color:#1A1726;">Bukan Anda yang melakukan ini?</strong><br>
-                    Jika Anda tidak mengubah email, akun Anda mungkin diakses orang lain. Segera gunakan fitur <strong>Lupa Password</strong> untuk mengambil alih akun dan amankan data Anda.
+                    <strong style="color:#1A1726;">Wasn't you?</strong><br>
+                    If you didn't change your email, your account may have been accessed by someone else. Immediately use the <strong>Forgot Password</strong> feature to reclaim your account and secure your data.
                   </p>
                 </td>
               </tr>
             </table>
 
             <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#5B5870;">
-              Salam,<br>
-              <strong style="color:#1A1726;">Tim JO-MOCK</strong>
+              Best,<br>
+              <strong style="color:#1A1726;">The JO-MOCK Team</strong>
             </p>
 
           </td>
@@ -135,24 +139,24 @@ export const emailChangeOldTemplate = ({ name, newEmail }) => {
 };
 
 /**
- * Dikirim ke EMAIL BARU — konfirmasi bahwa email ini sekarang aktif.
- * @param {{ name: string, changedAt: string }} params
+ * Sent to the NEW email — confirms that this email is now active.
+ * @param {{ name: string }} params
  */
 export const emailChangeNewTemplate = ({ name }) => {
   const changedAt = formatDate();
   const year      = new Date().getFullYear();
 
   return {
-    subject: 'Email Baru Anda Aktif — JO-MOCK',
+    subject: 'Your New Email Is Now Active',
 
-    text: `Halo ${name},\n\nEmail ini sekarang terdaftar sebagai email aktif akun JO-MOCK Anda sejak ${changedAt} WIB. Gunakan email ini untuk login dan menerima notifikasi selanjutnya.\n\n— Tim JO-MOCK`,
+    text: `Hello ${name},\n\nThis email is now registered as the active email address for your JO-MOCK account as of ${changedAt} UTC. Use this email to log in and receive future notifications.\n\n— The JO-MOCK Team`,
 
     html: `<!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Email Baru Aktif — JO-MOCK</title>
+  <title>Your New Email Is Now Active</title>
 </head>
 <body style="margin:0;padding:0;background-color:#F4F3FB;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F4F3FB;padding:48px 20px;">
@@ -167,7 +171,7 @@ export const emailChangeNewTemplate = ({ name }) => {
               <tr>
                 <td style="background-color:#ECFDF3;border:1px solid #ABEFC6;border-radius:100px;padding:6px 16px;">
                   <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;color:#17B26A;letter-spacing:0.5px;text-transform:uppercase;">
-                    &#10003;&nbsp; Email Aktif
+                    &#10003;&nbsp; Email Active
                   </p>
                 </td>
               </tr>
@@ -179,32 +183,32 @@ export const emailChangeNewTemplate = ({ name }) => {
         <tr>
           <td style="background-color:#FFFFFF;padding:20px 40px 40px;border-left:1px solid #E5E1EF;border-right:1px solid #E5E1EF;">
 
-            <h1 style="margin:0 0 16px;font-family:'Trebuchet MS',Georgia,serif;font-size:22px;font-weight:700;color:#1A1726;line-height:1.3;">Email baru Anda sekarang aktif</h1>
+            <h1 style="margin:0 0 16px;font-family:'Trebuchet MS',Georgia,serif;font-size:22px;font-weight:700;color:#1A1726;line-height:1.3;">Your new email is now active</h1>
 
             <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#5B5870;">
-              Halo, <strong style="color:#1A1726;">${name}</strong>!
+              Hello, <strong style="color:#1A1726;">${name}</strong>!
             </p>
             <p style="margin:0 0 28px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#5B5870;">
-              Email ini berhasil didaftarkan sebagai alamat email aktif akun JO-MOCK Anda. Mulai sekarang, gunakan email ini untuk login dan notifikasi.
+              This email has been successfully registered as the active email address for your JO-MOCK account. From now on, use this email to log in and receive notifications.
             </p>
 
             <!-- DETAIL -->
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;border:1px solid #E5E1EF;border-radius:8px;overflow:hidden;">
               <tr>
                 <td style="padding:14px 20px;background-color:#FAFAFA;border-bottom:1px solid #E5E1EF;">
-                  <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;color:#8B889C;letter-spacing:0.8px;text-transform:uppercase;">Detail Perubahan</p>
+                  <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;color:#8B889C;letter-spacing:0.8px;text-transform:uppercase;">Change Details</p>
                 </td>
               </tr>
               <tr>
                 <td style="padding:16px 20px;">
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                     <tr>
-                      <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;width:110px;padding-bottom:10px;vertical-align:top;">Aksi</td>
-                      <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;padding-bottom:10px;">Ganti Email</td>
+                      <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;width:110px;padding-bottom:10px;vertical-align:top;">Action</td>
+                      <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;padding-bottom:10px;">Email Change</td>
                     </tr>
                     <tr>
-                      <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;vertical-align:top;">Waktu Aktif</td>
-                      <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;">${changedAt} WIB</td>
+                      <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;vertical-align:top;">Activated At</td>
+                      <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;">${changedAt} UTC</td>
                     </tr>
                   </table>
                 </td>
@@ -216,15 +220,15 @@ export const emailChangeNewTemplate = ({ name }) => {
               <tr>
                 <td style="background-color:#F4F3FB;border-left:3px solid #6C5CE7;border-radius:0 6px 6px 0;padding:14px 16px;">
                   <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5B5870;line-height:1.6;">
-                    Gunakan email ini untuk login ke dashboard JO-MOCK. Semua notifikasi project berikutnya juga akan dikirim ke sini.
+                    Use this email to log in to your JO-MOCK dashboard. All future project notifications will also be sent here.
                   </p>
                 </td>
               </tr>
             </table>
 
             <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#5B5870;">
-              Salam,<br>
-              <strong style="color:#1A1726;">Tim JO-MOCK</strong>
+              Best,<br>
+              <strong style="color:#1A1726;">The JO-MOCK Team</strong>
             </p>
 
           </td>

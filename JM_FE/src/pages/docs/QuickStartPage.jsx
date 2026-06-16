@@ -8,13 +8,13 @@ const IC = 'bg-bg-surface text-brand-accent font-mono text-[13px] px-1.5 py-0.5 
 const PRE = 'bg-bg-surface border border-border rounded-xl p-4 overflow-x-auto mb-6'
 const CODE = 'text-[13px] font-mono text-foreground/90 leading-relaxed'
 
-const Step = ({ n, title, children }) => (
+const Step = ({ n, id, title, children }) => (
   <div className="relative pl-10 mb-8">
     <div className="absolute left-0 top-0 w-7 h-7 rounded-full bg-brand-primary/10
       text-brand-primary text-xs font-bold flex items-center justify-center">
       {n}
     </div>
-    <h3 className="font-heading font-semibold text-base text-foreground mb-3 scroll-mt-24">
+    <h3 id={id} className="font-heading font-semibold text-base text-foreground mb-3 scroll-mt-24">
       {title}
     </h3>
     {children}
@@ -42,9 +42,9 @@ export default function QuickStartPage() {
       </ul>
 
       {/* Step 1 */}
-      <h2 id="create-account" className={H2}>Steps</h2>
+      <h2 className={H2}>Steps</h2>
 
-      <Step n={1} title="Create an Account">
+      <Step n={1} id="create-account" title="Create an Account">
         <p className={P}>
           Head to the registration page and create your account with your email and a password.
           You'll receive a confirmation email if email verification is enabled on your platform.
@@ -56,7 +56,7 @@ export default function QuickStartPage() {
       </Step>
 
       {/* Step 2 */}
-      <Step n={2} title="Create a Project">
+      <Step n={2} id="create-project" title="Create a Project">
         <p className={P}>
           Click <strong className="font-semibold text-foreground">New Project</strong> on the dashboard.
           Give it a name — the platform automatically generates a unique slug from the name.
@@ -75,7 +75,7 @@ export default function QuickStartPage() {
       </Step>
 
       {/* Step 3 */}
-      <Step n={3} title="Add an Endpoint">
+      <Step n={3} id="add-endpoint" title="Add an Endpoint">
         <p className={P}>
           Inside your project, click <strong className="font-semibold text-foreground">Add Endpoint</strong>.
           Fill in the following:
@@ -100,7 +100,7 @@ export default function QuickStartPage() {
       </Step>
 
       {/* Step 4 */}
-      <Step n={4} title="Consume the Mock URL">
+      <Step n={4} id="consume-url" title="Consume the Mock URL">
         <p className={P}>
           Once an endpoint is defined, it's immediately live. The URL format is:
         </p>

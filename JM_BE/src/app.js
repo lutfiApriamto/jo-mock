@@ -26,9 +26,18 @@ const app = express();
 
 // ─── Global Middlewares ───────────────────────────────────────────────────────
 
-app.use(cors({
+// Strict CORS for /api/* — only the JO-MOCK FE is allowed
+app.use('/api', cors({
   origin: process.env.CLIENT_URL || 'http://localhost:5173',
   credentials: true,
+}));
+
+// Open CORS for /mock/* — consumed by any developer's app from any origin
+// Must be declared BEFORE the route handler so OPTIONS preflight is handled
+app.use('/mock', cors({
+  origin: '*',
+  allowedHeaders: ['x-api-key', 'Content-Type'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 }));
 
 app.use(express.json());

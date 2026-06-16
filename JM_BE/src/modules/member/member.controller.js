@@ -21,3 +21,9 @@ export const transferOwnership = asyncHandler(async (req, res) => {
   const members = await memberService.transferOwnership(req.project, req.user._id, req.body);
   sendSuccess(res, members, 'Kepemilikan project berhasil ditransfer');
 });
+
+// Keluar dari project. Owner wajib mengirim newOwnerId (transfer dulu), member biasa cukup tanpa body.
+export const leaveProject = asyncHandler(async (req, res) => {
+  await memberService.leaveProject(req.project, req.user._id, req.body);
+  sendSuccess(res, null, 'Anda berhasil keluar dari project');
+});

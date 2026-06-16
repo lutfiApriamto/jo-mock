@@ -11,6 +11,7 @@ import {
 } from 'react-icons/fa'
 import { useTheme } from '@/context/ThemeContext'
 import { register as apiRegister } from '@/features/auth/services/authService'
+import useAuthStore from '@/stores/authStore'
 
 const schema = z.object({
   name: z
@@ -84,6 +85,7 @@ export default function RegisterPage() {
   const [showConfirm, setShowConfirm] = useState(false)
   const navigate                      = useNavigate()
   const { theme, toggleTheme }        = useTheme()
+  const setAuth                       = useAuthStore((s) => s.setAuth)
 
   const {
     register,
@@ -99,9 +101,11 @@ export default function RegisterPage() {
   const onSubmit = async (data) => {
     const tid = toast.loading('Creating your account…')
     try {
-      await apiRegister({ name: data.name, email: data.email, password: data.password })
-      toast.success('Account created! Please log in.', { id: tid })
-      navigate('/login')
+      const res = await apiRegister({ name: data.name, email: data.email, password: data.password })
+      const { accessToken, user } = res.data.data.data
+      setAuth(user, accessToken)
+      toast.success('Welcome to JO-MOCK!', { id: tid })
+      navigate('/dashboard')
     } catch (err) {
       // Format error backend: { errorStatus, errorType, errors: [{ message, code }] }
       const msg = err.response?.data?.errors?.[0]?.message ?? 'Something went wrong. Please try again.'

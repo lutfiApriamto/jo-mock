@@ -1,7 +1,6 @@
 /**
- * Template email notifikasi perubahan kontrak API.
- * Dikirim ke seluruh member project setiap kali PM melakukan perubahan langsung
- * (method / path / requestSchema berubah) — changeType: 'pm_direct_edit'.
+ * Notification email sent to all project members when the API contract is updated.
+ * Triggered by direct PM edits (method / path / requestSchema changes) — changeType: 'pm_direct_edit'.
  *
  * @param {{
  *   memberName:     string,
@@ -22,16 +21,16 @@ export const contractChangeTemplate = ({
   changedAt,
   dashboardUrl,
 }) => ({
-  subject: `Kontrak Diperbarui — ${projectName} (v${projectVersion})`,
+  subject: `Contract Updated — ${projectName} (v${projectVersion})`,
 
-  text: `Halo ${memberName},\n\nTerdapat perubahan kontrak pada project "${projectName}".\n\nRingkasan: ${summary}\n\nDiubah oleh: ${editorName}\nWaktu: ${changedAt} WIB\nVersi baru: v${projectVersion}\n\nLihat selengkapnya di dashboard:\n${dashboardUrl}\n\n— Tim JO-MOCK`,
+  text: `Hello ${memberName},\n\nThe API contract for the project "${projectName}" has been updated.\n\nSummary: ${summary}\n\nChanged by: ${editorName}\nTime: ${changedAt} UTC\nNew version: v${projectVersion}\n\nView the full details on the dashboard:\n${dashboardUrl}\n\n— The JO-MOCK Team`,
 
   html: `<!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kontrak Diperbarui — ${projectName}</title>
+  <title>Contract Updated — ${projectName}</title>
 </head>
 <body style="margin:0;padding:0;background-color:#F4F3FB;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F4F3FB;padding:48px 20px;">
@@ -48,14 +47,14 @@ export const contractChangeTemplate = ({
             </td>
           </tr>
 
-          <!-- BADGE ROW -->
+          <!-- BADGE -->
           <tr>
             <td style="background-color:#FFFFFF;padding:28px 40px 0;border-left:1px solid #E5E1EF;border-right:1px solid #E5E1EF;">
               <table role="presentation" cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="background-color:#EDE9FE;border:1px solid #C4B5FD;border-radius:100px;padding:6px 16px;">
                     <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;color:#6C5CE7;letter-spacing:0.5px;text-transform:uppercase;">
-                      &#9888;&nbsp; Kontrak Diperbarui
+                      &#9888;&nbsp; Contract Updated
                     </p>
                   </td>
                 </tr>
@@ -67,30 +66,30 @@ export const contractChangeTemplate = ({
           <tr>
             <td style="background-color:#FFFFFF;padding:20px 40px 40px;border-left:1px solid #E5E1EF;border-right:1px solid #E5E1EF;">
 
-              <h1 style="margin:0 0 16px;font-family:'Trebuchet MS',Georgia,serif;font-size:22px;font-weight:700;color:#1A1726;line-height:1.3;">Ada perubahan kontrak di project Anda</h1>
+              <h1 style="margin:0 0 16px;font-family:'Trebuchet MS',Georgia,serif;font-size:22px;font-weight:700;color:#1A1726;line-height:1.3;">Your project's API contract has changed</h1>
 
               <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#5B5870;">
-                Halo, <strong style="color:#1A1726;">${memberName}</strong>!
+                Hello, <strong style="color:#1A1726;">${memberName}</strong>!
               </p>
               <p style="margin:0 0 28px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#5B5870;">
-                Project <strong style="color:#1A1726;">${projectName}</strong> baru saja mengalami perubahan kontrak API. Pastikan tim Anda sudah mengetahui pembaruan ini agar integrasi tetap sinkron.
+                The project <strong style="color:#1A1726;">${projectName}</strong> has just had its API contract updated. Make sure your team is aware of these changes to keep integrations in sync.
               </p>
 
-              <!-- RINGKASAN PERUBAHAN -->
+              <!-- CHANGE SUMMARY -->
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
                 <tr>
                   <td style="background-color:#F4F3FB;border-left:3px solid #6C5CE7;border-radius:0 6px 6px 0;padding:14px 18px;">
-                    <p style="margin:0 0 4px;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;color:#8B889C;letter-spacing:0.8px;text-transform:uppercase;">Ringkasan</p>
+                    <p style="margin:0 0 4px;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;color:#8B889C;letter-spacing:0.8px;text-transform:uppercase;">Summary</p>
                     <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:13px;color:#1A1726;line-height:1.6;">${summary}</p>
                   </td>
                 </tr>
               </table>
 
-              <!-- DETAIL PERUBAHAN -->
+              <!-- CHANGE DETAILS -->
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;border:1px solid #E5E1EF;border-radius:8px;overflow:hidden;">
                 <tr>
                   <td style="padding:14px 20px;background-color:#FAFAFA;border-bottom:1px solid #E5E1EF;">
-                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;color:#8B889C;letter-spacing:0.8px;text-transform:uppercase;">Detail Perubahan</p>
+                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;color:#8B889C;letter-spacing:0.8px;text-transform:uppercase;">Change Details</p>
                   </td>
                 </tr>
                 <tr>
@@ -101,18 +100,18 @@ export const contractChangeTemplate = ({
                         <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;padding-bottom:10px;">${projectName}</td>
                       </tr>
                       <tr>
-                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;padding-bottom:10px;vertical-align:top;">Versi Baru</td>
+                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;padding-bottom:10px;vertical-align:top;">New Version</td>
                         <td style="padding-bottom:10px;">
                           <span style="display:inline-block;background-color:#6C5CE7;color:#FFFFFF;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;padding:2px 10px;border-radius:100px;">v${projectVersion}</span>
                         </td>
                       </tr>
                       <tr>
-                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;padding-bottom:10px;vertical-align:top;">Diubah oleh</td>
+                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;padding-bottom:10px;vertical-align:top;">Changed by</td>
                         <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;padding-bottom:10px;">${editorName}</td>
                       </tr>
                       <tr>
-                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;vertical-align:top;">Waktu</td>
-                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;">${changedAt} WIB</td>
+                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;vertical-align:top;">Time</td>
+                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;">${changedAt} UTC</td>
                       </tr>
                     </table>
                   </td>
@@ -125,7 +124,7 @@ export const contractChangeTemplate = ({
                   <td style="background-color:#6C5CE7;border-radius:8px;">
                     <a href="${dashboardUrl}" target="_blank"
                        style="display:inline-block;padding:14px 36px;font-family:'Trebuchet MS',Arial,sans-serif;font-size:15px;font-weight:700;color:#FFFFFF;text-decoration:none;border-radius:8px;letter-spacing:0.2px;">
-                      Lihat di Dashboard
+                      View in Dashboard
                     </a>
                   </td>
                 </tr>
@@ -136,16 +135,16 @@ export const contractChangeTemplate = ({
                 <tr>
                   <td style="background-color:#FFFBEB;border-left:3px solid #F59E0B;border-radius:0 6px 6px 0;padding:12px 16px;">
                     <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5B5870;line-height:1.6;">
-                      <strong style="color:#1A1726;">Mengapa Anda menerima email ini?</strong><br>
-                      Anda adalah anggota project <strong>${projectName}</strong>. Setiap perubahan kontrak akan dikirimkan ke seluruh anggota agar integrasi FE dan BE tetap sinkron.
+                      <strong style="color:#1A1726;">Why are you receiving this email?</strong><br>
+                      You are a member of the project <strong>${projectName}</strong>. Every contract change is sent to all members to keep FE and BE integrations in sync.
                     </p>
                   </td>
                 </tr>
               </table>
 
               <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#5B5870;">
-                Salam,<br>
-                <strong style="color:#1A1726;">Tim JO-MOCK</strong>
+                Best,<br>
+                <strong style="color:#1A1726;">The JO-MOCK Team</strong>
               </p>
 
             </td>
@@ -155,7 +154,7 @@ export const contractChangeTemplate = ({
           <tr>
             <td style="background-color:#FAFAFA;border:1px solid #E5E1EF;border-top:none;border-radius:0 0 12px 12px;padding:24px 40px;">
               <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#8B889C;text-align:center;">
-                Tombol tidak berfungsi? Salin link berikut ke browser Anda:
+                Button not working? Copy the link below into your browser:
               </p>
               <p style="margin:0 0 16px;font-family:'Courier New',Courier,monospace;font-size:11px;color:#6C5CE7;text-align:center;word-break:break-all;">
                 ${dashboardUrl}

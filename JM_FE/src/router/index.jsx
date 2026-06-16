@@ -15,17 +15,18 @@ import RegisterPage from '@/pages/auth/RegisterPage'
 import ForgotPasswordPage from '@/pages/auth/ForgotPasswordPage'
 import ResetPasswordPage from '@/pages/auth/ResetPasswordPage'
 
-import ProjectsPage from '@/pages/dashboard/ProjectsPage'
-import ProjectDetailPage from '@/pages/dashboard/ProjectDetailPage'
-import EndpointDetailPage from '@/pages/dashboard/EndpointDetailPage'
-import ProfilePage from '@/pages/dashboard/ProfilePage'
-import InvitationsPage from '@/pages/dashboard/InvitationsPage'
+// ── Lazy: dashboard pages ───────────────────────────────────────────
+const ProjectsPage      = lazy(() => import('@/pages/dashboard/ProjectsPage'))
+const ProjectDetailPage = lazy(() => import('@/pages/dashboard/ProjectDetailPage'))
+const EndpointDetailPage= lazy(() => import('@/pages/dashboard/EndpointDetailPage'))
+const ProfilePage       = lazy(() => import('@/pages/dashboard/ProfilePage'))
+const InvitationsPage   = lazy(() => import('@/pages/dashboard/InvitationsPage'))
 
-import InvitationPage from '@/pages/invitation/InvitationPage'
-
-import AdminDashboardPage from '@/pages/admin/AdminDashboardPage'
-import AdminUsersPage from '@/pages/admin/AdminUsersPage'
-import AdminProjectsPage from '@/pages/admin/AdminProjectsPage'
+// ── Lazy: invitation & admin pages ─────────────────────────────────
+const InvitationPage     = lazy(() => import('@/pages/invitation/InvitationPage'))
+const AdminDashboardPage = lazy(() => import('@/pages/admin/AdminDashboardPage'))
+const AdminUsersPage     = lazy(() => import('@/pages/admin/AdminUsersPage'))
+const AdminProjectsPage  = lazy(() => import('@/pages/admin/AdminProjectsPage'))
 
 import { DOCS_TOC } from '@/shared/constants/docsConfig'
 
@@ -79,7 +80,14 @@ const router = createBrowserRouter([
         ],
       },
 
-      { path: '/invitations/:token', element: <InvitationPage /> },
+      {
+        path: '/invitations/:token',
+        element: (
+          <Suspense fallback={<div className="min-h-screen bg-background" />}>
+            <InvitationPage />
+          </Suspense>
+        ),
+      },
 
       // ── Auth (guest only) ────────────────────────────────────────
       {
@@ -99,11 +107,16 @@ const router = createBrowserRouter([
           {
             element: <DashboardLayout />,
             children: [
-              { path: '/dashboard',                                                    element: <ProjectsPage /> },
-              { path: '/dashboard/projects/:projectId',                               element: <ProjectDetailPage /> },
-              { path: '/dashboard/projects/:projectId/endpoints/:endpointId',         element: <EndpointDetailPage /> },
-              { path: '/dashboard/profile',                                           element: <ProfilePage /> },
-              { path: '/dashboard/invitations',                                       element: <InvitationsPage /> },
+              { path: '/dashboard',                element: <ProjectsPage /> },
+              {
+                path: '/dashboard/projects/:projectId',
+                element: <ProjectDetailPage />,
+                children: [
+                  { path: 'endpoints/:endpointId', element: <EndpointDetailPage /> },
+                ],
+              },
+              { path: '/dashboard/profile',      element: <ProfilePage /> },
+              { path: '/dashboard/invitations',  element: <InvitationsPage /> },
             ],
           },
         ],

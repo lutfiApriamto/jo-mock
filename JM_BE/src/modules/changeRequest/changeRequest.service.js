@@ -33,7 +33,7 @@ const notifyAllMembers = async (project, approver, cr, submitterName, newVersion
     hour: '2-digit', minute: '2-digit',
   });
 
-  const dashboardUrl = `${process.env.CLIENT_URL}/projects/${project.slug}`;
+  const dashboardUrl = `${process.env.CLIENT_URL}/dashboard/projects/${project._id}?tab=requests`;
 
   for (const user of users) {
     const { subject, html, text } = crApprovedTemplate({
@@ -72,7 +72,7 @@ export const submitCR = async (project, submitter, submitterRole, { description,
   // Notifikasi PM bahwa ada CR baru yang menunggu tinjauan
   try {
     const pm           = await User.findById(project.ownerId).select('name email').lean();
-    const dashboardUrl = `${process.env.CLIENT_URL}/projects/${project.slug}/change-requests`;
+    const dashboardUrl = `${process.env.CLIENT_URL}/dashboard/projects/${project._id}?tab=requests`;
 
     if (pm) {
       const { subject, html, text } = crSubmittedTemplate({
@@ -212,7 +212,7 @@ export const rejectCR = async (project, crId, pmUser, { reason } = {}) => {
   try {
     const submitter = await User.findById(cr.submittedBy).select('name email').lean();
     if (submitter) {
-      const dashboardUrl = `${process.env.CLIENT_URL}/projects/${project.slug}`;
+      const dashboardUrl = `${process.env.CLIENT_URL}/dashboard/projects/${project._id}?tab=requests`;
       const { subject, html, text } = crRejectedTemplate({
         submitterName: submitter.name,
         pmName:        pmUser.name,

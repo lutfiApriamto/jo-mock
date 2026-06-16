@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/mock/:path*",
+      "destination": "$BACKEND_BASE_URL/mock/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

@@ -42,6 +42,13 @@ export const inviteMember = async (project, inviter, { userId, role }) => {
     throw err;
   }
 
+  // Self-invite prevention
+  if (inviter._id.toString() === userId) {
+    const err = new Error('Anda tidak dapat mengundang diri sendiri ke project');
+    err.statusCode = 409;
+    throw err;
+  }
+
   if (project.ownerId.toString() === userId) {
     const err = new Error('Owner project sudah otomatis memiliki akses sebagai PM');
     err.statusCode = 409;
@@ -53,6 +60,27 @@ export const inviteMember = async (project, inviter, { userId, role }) => {
     const err = new Error('User sudah menjadi anggota project ini');
     err.statusCode = 409;
     throw err;
+  }
+
+  // Kuota PM = 1: cek member aktif dan pending invitation
+  if (role === 'PM') {
+    const hasPmMember = project.members.some((m) => m.role === 'PM');
+    if (hasPmMember) {
+      const err = new Error('Project sudah memiliki Project Manager aktif. Ubah role PM tersebut terlebih dahulu sebelum mengundang PM baru.');
+      err.statusCode = 409;
+      throw err;
+    }
+
+    const hasPendingPmInvite = await Invitation.exists({
+      projectId: project._id,
+      role:      'PM',
+      status:    'pending',
+    });
+    if (hasPendingPmInvite) {
+      const err = new Error('Sudah ada undangan PM yang menunggu konfirmasi. Batalkan undangan tersebut untuk mengundang PM baru.');
+      err.statusCode = 409;
+      throw err;
+    }
   }
 
   // Tolak jika sudah ada undangan pending untuk user ini di project ini
@@ -272,7 +300,7 @@ export const acceptInvitation = async (rawToken, currentUser) => {
     const pm = await User.findById(project.ownerId).select('name email').lean();
     if (pm && pm._id.toString() !== currentUser._id.toString()) {
       const joinedAt     = formatDateTime(new Date());
-      const dashboardUrl = `${process.env.CLIENT_URL}/projects/${project.slug}/members`;
+      const dashboardUrl = `${process.env.CLIENT_URL}/dashboard/projects/${project._id}?tab=members`;
 
       const { subject, html, text } = memberJoinedTemplate({
         pmName:      pm.name,
@@ -342,6 +370,121 @@ export const cancelInvitation = async (project, invitationId) => {
   }
 
   await Invitation.findByIdAndDelete(invitationId);
+};
+
+// Terima undangan by ID — dipanggil dari dashboard (tanpa raw token).
+export const acceptInvitationById = async (invitationId, currentUser) => {
+  const invitation = await Invitation.findById(invitationId);
+
+  if (!invitation) {
+    const err = new Error('Undangan tidak ditemukan');
+    err.statusCode = 404;
+    throw err;
+  }
+
+  if (invitation.invitedUserId.toString() !== currentUser._id.toString()) {
+    const err = new Error('Undangan ini bukan untuk akun Anda');
+    err.statusCode = 403;
+    throw err;
+  }
+
+  if (invitation.status !== 'pending') {
+    const err = new Error(
+      `Undangan ini sudah ${invitation.status === 'accepted' ? 'diterima' : 'ditolak'} sebelumnya`
+    );
+    err.statusCode = 409;
+    throw err;
+  }
+
+  if (new Date() > new Date(invitation.expiry)) {
+    const err = new Error('Undangan ini sudah kedaluwarsa');
+    err.statusCode = 410;
+    throw err;
+  }
+
+  const project = await Project.findById(invitation.projectId);
+  if (!project) {
+    const err = new Error('Project tidak lagi tersedia');
+    err.statusCode = 404;
+    throw err;
+  }
+
+  const alreadyMember = project.members.some(
+    (m) => m.userId.toString() === currentUser._id.toString()
+  );
+  if (alreadyMember) {
+    invitation.status = 'accepted';
+    await invitation.save();
+    const err = new Error('Anda sudah menjadi anggota project ini');
+    err.statusCode = 409;
+    throw err;
+  }
+
+  if (project.members.length >= MAX_MEMBER_SLOTS) {
+    const err = new Error('Project telah mencapai batas maksimal anggota');
+    err.statusCode = 409;
+    throw err;
+  }
+
+  project.members.push({ userId: currentUser._id, role: invitation.role });
+  invitation.status = 'accepted';
+
+  await Promise.all([project.save(), invitation.save()]);
+
+  try {
+    const pm = await User.findById(project.ownerId).select('name email').lean();
+    if (pm && pm._id.toString() !== currentUser._id.toString()) {
+      const joinedAt     = formatDateTime(new Date());
+      const dashboardUrl = `${process.env.CLIENT_URL}/dashboard/projects/${project._id}?tab=members`;
+      const { subject, html, text } = memberJoinedTemplate({
+        pmName:      pm.name,
+        memberName:  currentUser.name,
+        memberEmail: currentUser.email,
+        role:        invitation.role,
+        projectName: project.name,
+        dashboardUrl,
+        joinedAt,
+      });
+      await sendMail({ to: pm.email, subject, html, text });
+    }
+  } catch (notifyErr) {
+    console.error('[invitation] Gagal kirim notifikasi ke PM:', notifyErr.message);
+  }
+
+  return {
+    projectId:   project._id,
+    projectName: project.name,
+    slug:        project.slug,
+    role:        invitation.role,
+  };
+};
+
+// Tolak undangan by ID — dipanggil dari dashboard (tanpa raw token).
+export const declineInvitationById = async (invitationId, currentUser) => {
+  const invitation = await Invitation.findById(invitationId);
+
+  if (!invitation) {
+    const err = new Error('Undangan tidak ditemukan');
+    err.statusCode = 404;
+    throw err;
+  }
+
+  if (invitation.invitedUserId.toString() !== currentUser._id.toString()) {
+    const err = new Error('Undangan ini bukan untuk akun Anda');
+    err.statusCode = 403;
+    throw err;
+  }
+
+  if (invitation.status !== 'pending') {
+    const err = new Error(
+      `Undangan ini sudah ${invitation.status === 'accepted' ? 'diterima' : 'ditolak'} sebelumnya`
+    );
+    err.statusCode = 409;
+    throw err;
+  }
+
+  invitation.status = 'declined';
+  await invitation.save();
 };
 
 // Ambil semua undangan pending yang ditujukan ke user yang sedang login.

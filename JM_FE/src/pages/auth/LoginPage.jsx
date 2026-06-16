@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -58,8 +58,9 @@ const inputCls = (err) =>
   ].join(' ')
 
 export default function LoginPage() {
-  const [showPw, setShowPw] = useState(false)
-  const navigate             = useNavigate()
+  const [showPw, setShowPw]  = useState(false)
+  const navigate              = useNavigate()
+  const [searchParams]        = useSearchParams()
   const { theme, toggleTheme } = useTheme()
   const setAuth = useAuthStore((s) => s.setAuth)
 
@@ -79,7 +80,9 @@ export default function LoginPage() {
       const { accessToken, user } = res.data.data.data
       setAuth(user, accessToken)
       toast.success('Welcome back!', { id: tid })
-      navigate(user.role === 'superadmin' ? '/admin' : '/dashboard')
+      const redirectTo = searchParams.get('redirect')
+      const dest = redirectTo?.startsWith('/') ? redirectTo : (user.role === 'superadmin' ? '/admin' : '/dashboard')
+      navigate(dest)
     } catch (err) {
       const msg = err.response?.data?.errors?.[0]?.message ?? 'Something went wrong. Please try again.'
       toast.error(msg, { id: tid })

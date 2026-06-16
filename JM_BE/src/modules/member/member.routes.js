@@ -34,7 +34,11 @@ router.put('/:projectId/members/:userId', permission(['PM']), validate(schema.up
 // DELETE /api/projects/:projectId/members/:userId — keluarkan anggota (PM only)
 router.delete('/:projectId/members/:userId', permission(['PM']), ctrl.removeMember);
 
-// PATCH /api/projects/:projectId/transfer-ownership — transfer kepemilikan ke member (owner only)
+// PATCH /api/projects/:projectId/transfer-ownership — transfer kepemilikan ke member, owner lama tetap (owner only)
 router.patch('/:projectId/transfer-ownership', permission(['PM']), validate(schema.transferOwnershipSchema), ctrl.transferOwnership);
+
+// POST /api/projects/:projectId/leave — keluar dari project (semua role)
+// Owner wajib kirim { newOwnerId }; member biasa cukup body kosong.
+router.post('/:projectId/leave', permission(['PM', 'FE', 'BE']), validate(schema.leaveProjectSchema), ctrl.leaveProject);
 
 export default router;

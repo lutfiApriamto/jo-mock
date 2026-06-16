@@ -51,6 +51,20 @@ export const declineInvitation = asyncHandler(async (req, res) => {
   sendSuccess(res, null, 'Undangan berhasil ditolak');
 });
 
+// Terima undangan by ID — auth required, dipanggil dari dashboard.
+// POST /api/users/me/invitations/:invitationId/accept
+export const acceptInvitationById = asyncHandler(async (req, res) => {
+  const result = await inviteService.acceptInvitationById(req.params.invitationId, req.user);
+  sendSuccess(res, result, `Selamat! Anda resmi bergabung ke project "${result.projectName}" sebagai ${result.role}`);
+});
+
+// Tolak undangan by ID — auth required, dipanggil dari dashboard.
+// POST /api/users/me/invitations/:invitationId/decline
+export const declineInvitationById = asyncHandler(async (req, res) => {
+  await inviteService.declineInvitationById(req.params.invitationId, req.user);
+  sendSuccess(res, null, 'Undangan berhasil ditolak');
+});
+
 // Ambil semua undangan pending milik user yang sedang login.
 // GET /api/users/me/invitations
 export const getMyInvitations = asyncHandler(async (req, res) => {

@@ -20,6 +20,12 @@ router.get('/me', ctrl.getMyProfile);
 // GET /api/users/me/invitations — undangan project yang menunggu konfirmasi user
 router.get('/me/invitations', invCtrl.getMyInvitations);
 
+// POST /api/users/me/invitations/:invitationId/accept — terima undangan by ID (dari dashboard)
+router.post('/me/invitations/:invitationId/accept', invCtrl.acceptInvitationById);
+
+// POST /api/users/me/invitations/:invitationId/decline — tolak undangan by ID (dari dashboard)
+router.post('/me/invitations/:invitationId/decline', invCtrl.declineInvitationById);
+
 // PUT /api/users/me — update nama, avatar, atau email (email butuh currentPassword)
 router.put('/me', validate(schema.updateProfileSchema), ctrl.updateMyProfile);
 

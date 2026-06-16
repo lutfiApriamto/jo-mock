@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
 
 const AdminLayout = () => {
@@ -9,7 +10,9 @@ const AdminLayout = () => {
         <header className="h-14 border-b border-border shrink-0" />
 
         <main className="flex-1 p-6 overflow-auto">
-          <Outlet />
+          <Suspense fallback={<div className="w-full h-32 animate-pulse bg-bg-surface rounded-xl" />}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
     </div>

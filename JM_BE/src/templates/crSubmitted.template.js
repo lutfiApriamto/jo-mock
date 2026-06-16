@@ -1,5 +1,5 @@
 /**
- * Template email notifikasi CR baru masuk — dikirim ke PM project.
+ * Notification email sent to the PM when a new Change Request is submitted.
  * @param {{
  *   pmName:          string,
  *   submitterName:   string,
@@ -17,10 +17,14 @@ export const crSubmittedTemplate = ({
   description,
   dashboardUrl,
 }) => {
-  const submittedAt = new Date().toLocaleString('id-ID', {
-    timeZone: 'Asia/Jakarta',
-    day: '2-digit', month: 'long', year: 'numeric',
-    hour: '2-digit', minute: '2-digit',
+  const submittedAt = new Date().toLocaleString('en-US', {
+    timeZone: 'UTC',
+    day:      '2-digit',
+    month:    'long',
+    year:     'numeric',
+    hour:     '2-digit',
+    minute:   '2-digit',
+    hour12:   true,
   });
 
   const year = new Date().getFullYear();
@@ -28,16 +32,16 @@ export const crSubmittedTemplate = ({
   const roleLabel = submitterRole === 'BE' ? 'Backend Developer' : 'Frontend Developer';
 
   return {
-    subject: `CR Baru Menunggu Tinjauan — ${projectName}`,
+    subject: `New CR Awaiting Review — ${projectName}`,
 
-    text: `Halo ${pmName},\n\n${submitterName} (${roleLabel}) mengajukan Change Request baru pada project "${projectName}".\n\nDeskripsi: ${description}\n\nWaktu: ${submittedAt} WIB\n\nTinjau dan putuskan CR ini melalui dashboard:\n${dashboardUrl}\n\n— Tim JO-MOCK`,
+    text: `Hello ${pmName},\n\n${submitterName} (${roleLabel}) has submitted a new Change Request for the project "${projectName}".\n\nDescription: ${description}\n\nTime: ${submittedAt} UTC\n\nReview and decide on this CR via the dashboard:\n${dashboardUrl}\n\n— The JO-MOCK Team`,
 
     html: `<!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CR Baru — ${projectName}</title>
+  <title>New CR — ${projectName}</title>
 </head>
 <body style="margin:0;padding:0;background-color:#F4F3FB;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F4F3FB;padding:48px 20px;">
@@ -61,7 +65,7 @@ export const crSubmittedTemplate = ({
                 <tr>
                   <td style="background-color:#EDE9FE;border:1px solid #C4B5FD;border-radius:100px;padding:6px 16px;">
                     <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;color:#6C5CE7;letter-spacing:0.5px;text-transform:uppercase;">
-                      &#128203;&nbsp; CR Baru Masuk
+                      &#128203;&nbsp; New Change Request
                     </p>
                   </td>
                 </tr>
@@ -73,38 +77,38 @@ export const crSubmittedTemplate = ({
           <tr>
             <td style="background-color:#FFFFFF;padding:20px 40px 40px;border-left:1px solid #E5E1EF;border-right:1px solid #E5E1EF;">
 
-              <h1 style="margin:0 0 16px;font-family:'Trebuchet MS',Georgia,serif;font-size:22px;font-weight:700;color:#1A1726;line-height:1.3;">Change Request baru menunggu tinjauan Anda</h1>
+              <h1 style="margin:0 0 16px;font-family:'Trebuchet MS',Georgia,serif;font-size:22px;font-weight:700;color:#1A1726;line-height:1.3;">A new Change Request is awaiting your review</h1>
 
               <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#5B5870;">
-                Halo, <strong style="color:#1A1726;">${pmName}</strong>!
+                Hello, <strong style="color:#1A1726;">${pmName}</strong>!
               </p>
               <p style="margin:0 0 28px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#5B5870;">
-                <strong style="color:#1A1726;">${submitterName}</strong> mengajukan sebuah Change Request pada project
-                <strong style="color:#1A1726;">${projectName}</strong> dan membutuhkan keputusan Anda.
+                <strong style="color:#1A1726;">${submitterName}</strong> has submitted a Change Request for the project
+                <strong style="color:#1A1726;">${projectName}</strong> and needs your decision.
               </p>
 
-              <!-- DESKRIPSI CR -->
+              <!-- CR DESCRIPTION -->
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
                 <tr>
                   <td style="background-color:#F4F3FB;border-left:3px solid #6C5CE7;border-radius:0 6px 6px 0;padding:14px 18px;">
-                    <p style="margin:0 0 4px;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;color:#8B889C;letter-spacing:0.8px;text-transform:uppercase;">Deskripsi CR</p>
+                    <p style="margin:0 0 4px;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;color:#8B889C;letter-spacing:0.8px;text-transform:uppercase;">CR Description</p>
                     <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;line-height:1.6;">${description}</p>
                   </td>
                 </tr>
               </table>
 
-              <!-- DETAIL -->
+              <!-- SUBMISSION DETAILS -->
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;border:1px solid #E5E1EF;border-radius:8px;overflow:hidden;">
                 <tr>
                   <td style="padding:14px 20px;background-color:#FAFAFA;border-bottom:1px solid #E5E1EF;">
-                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;color:#8B889C;letter-spacing:0.8px;text-transform:uppercase;">Detail Pengajuan</p>
+                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;color:#8B889C;letter-spacing:0.8px;text-transform:uppercase;">Submission Details</p>
                   </td>
                 </tr>
                 <tr>
                   <td style="padding:16px 20px;">
                     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                       <tr>
-                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;width:120px;padding-bottom:10px;vertical-align:top;">Pengaju</td>
+                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;width:120px;padding-bottom:10px;vertical-align:top;">Submitted by</td>
                         <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;padding-bottom:10px;">${submitterName}</td>
                       </tr>
                       <tr>
@@ -119,8 +123,8 @@ export const crSubmittedTemplate = ({
                         <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;padding-bottom:10px;">${projectName}</td>
                       </tr>
                       <tr>
-                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;vertical-align:top;">Waktu</td>
-                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;">${submittedAt} WIB</td>
+                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#8B889C;vertical-align:top;">Time</td>
+                        <td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1726;font-weight:600;">${submittedAt} UTC</td>
                       </tr>
                     </table>
                   </td>
@@ -132,7 +136,7 @@ export const crSubmittedTemplate = ({
                 <tr>
                   <td style="background-color:#FFFBEB;border-left:3px solid #F59E0B;border-radius:0 6px 6px 0;padding:14px 16px;">
                     <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5B5870;line-height:1.6;">
-                      Tinjau detail Change Request, pertimbangkan dampaknya terhadap kontrak API, lalu berikan keputusan melalui dashboard.
+                      Review the Change Request details, consider the impact on the API contract, then make your decision via the dashboard.
                     </p>
                   </td>
                 </tr>
@@ -144,15 +148,15 @@ export const crSubmittedTemplate = ({
                   <td style="background-color:#6C5CE7;border-radius:8px;">
                     <a href="${dashboardUrl}" target="_blank"
                        style="display:inline-block;padding:14px 36px;font-family:'Trebuchet MS',Arial,sans-serif;font-size:15px;font-weight:700;color:#FFFFFF;text-decoration:none;border-radius:8px;letter-spacing:0.2px;">
-                      Tinjau Change Request
+                      Review Change Request
                     </a>
                   </td>
                 </tr>
               </table>
 
               <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#5B5870;">
-                Salam,<br>
-                <strong style="color:#1A1726;">Tim JO-MOCK</strong>
+                Best,<br>
+                <strong style="color:#1A1726;">The JO-MOCK Team</strong>
               </p>
 
             </td>
@@ -162,7 +166,7 @@ export const crSubmittedTemplate = ({
           <tr>
             <td style="background-color:#FAFAFA;border:1px solid #E5E1EF;border-top:none;border-radius:0 0 12px 12px;padding:24px 40px;">
               <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#8B889C;text-align:center;">
-                Tombol tidak berfungsi? Salin link berikut ke browser Anda:
+                Button not working? Copy the link below into your browser:
               </p>
               <p style="margin:0 0 16px;font-family:'Courier New',Courier,monospace;font-size:11px;color:#6C5CE7;text-align:center;word-break:break-all;">
                 ${dashboardUrl}

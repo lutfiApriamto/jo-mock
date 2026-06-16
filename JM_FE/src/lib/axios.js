@@ -30,7 +30,12 @@ api.interceptors.response.use(
   async (error) => {
     const original = error.config
 
-    if (error.response?.status === 401 && !original._retry) {
+    // Auth endpoints (login, register) returning 401 mean bad credentials,
+    // not an expired token — skip the refresh flow entirely for them.
+    const isAuthEndpoint = original.url?.includes('/auth/login') ||
+                           original.url?.includes('/auth/register')
+
+    if (error.response?.status === 401 && !original._retry && !isAuthEndpoint) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject })
