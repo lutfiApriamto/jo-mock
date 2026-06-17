@@ -28,7 +28,7 @@ const app = express();
 
 // Strict CORS for /api/* — only the JO-MOCK FE is allowed
 app.use('/api', cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: process.env.CLIENT_URL,
   credentials: true,
 }));
 
