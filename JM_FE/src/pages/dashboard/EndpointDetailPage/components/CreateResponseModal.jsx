@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
-import { FaTimes } from 'react-icons/fa'
+import { FaTimes, FaFileImport } from 'react-icons/fa'
+import { readJsonFile } from '@/shared/utils/jsonImportExport'
 import { createResponse } from '@/features/response/services/responseService'
 import { useProjectCtx } from '@/pages/dashboard/ProjectDetailPage/context'
 import { useEndpointCtx } from '../context'
@@ -29,6 +30,21 @@ export default function CreateResponseModal({ onClose }) {
   const [statusCode, setStatusCode] = useState(200)
   const [body,       setBody]       = useState(defaultBody(200))
   const [bodyError,  setBodyError]  = useState(null)
+  const fileRef = useRef(null)
+
+  const handleImport = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    try {
+      const json = await readJsonFile(file)
+      setBody(JSON.stringify(json, null, 2))
+      setBodyError(null)
+      toast.success('JSON imported successfully.')
+    } catch {
+      toast.error('File is not valid JSON.')
+    }
+    e.target.value = ''
+  }
 
   useEffect(() => {
     const handler = (e) => { if (e.key === 'Escape') onClose() }
@@ -149,9 +165,23 @@ export default function CreateResponseModal({ onClose }) {
 
             {/* Body JSON */}
             <div>
-              <label className="block text-[12.5px] font-medium text-foreground/65 mb-1.5">
-                Body (JSON)
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-[12.5px] font-medium text-foreground/65">
+                  Body (JSON)
+                </label>
+                <button
+                  type="button"
+                  onClick={() => fileRef.current?.click()}
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-medium
+                    border border-border bg-bg-surface text-foreground
+                    hover:border-brand-primary/50 hover:text-brand-primary
+                    transition-all duration-150"
+                >
+                  <FaFileImport size={10} />
+                  Import JSON
+                </button>
+                <input ref={fileRef} type="file" accept=".json,application/json" onChange={handleImport} className="hidden" />
+              </div>
               <textarea
                 value={body}
                 onChange={(e) => { setBody(e.target.value); setBodyError(null) }}

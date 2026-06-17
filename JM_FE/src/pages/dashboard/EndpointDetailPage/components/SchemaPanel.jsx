@@ -1,7 +1,8 @@
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useRef } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
-import { FaSave, FaCode } from 'react-icons/fa'
+import { FaSave, FaCode, FaFileImport, FaDownload } from 'react-icons/fa'
+import { readJsonFile, downloadJson, inferSchemaFromJson, schemaToExampleJson } from '@/shared/utils/jsonImportExport'
 import InfoTooltip from '@/shared/components/InfoTooltip'
 import { updateEndpoint } from '@/features/endpoint/services/endpointService'
 import { useProjectCtx } from '@/pages/dashboard/ProjectDetailPage/context'
@@ -28,8 +29,33 @@ export default function SchemaPanel() {
 
   const [fields, setFields] = useState(initial)
   const [dirty,  setDirty]  = useState(false)
+  const fileRef = useRef(null)
 
   const isPM = myRole === 'PM'
+
+  const handleImportSchema = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    try {
+      const json = await readJsonFile(file)
+      if (typeof json !== 'object' || json === null || Array.isArray(json)) {
+        return toast.error('JSON must be an object (e.g. { "name": "John", "age": 30 }).')
+      }
+      const inferred = inferSchemaFromJson(json)
+      setFields(inferred)
+      setDirty(true)
+      toast.success(`Imported ${inferred.length} fields from JSON.`)
+    } catch {
+      toast.error('File is not valid JSON.')
+    }
+    e.target.value = ''
+  }
+
+  const handleExportSchema = () => {
+    const example = schemaToExampleJson(fields)
+    const slug = endpoint?.path?.replace(/[^a-zA-Z0-9]/g, '-').replace(/-+/g, '-') ?? 'schema'
+    downloadJson(example, `request-schema-${slug}.json`)
+  }
 
   const handleVisualChange = useCallback((next) => {
     setFields(next)
@@ -62,18 +88,50 @@ export default function SchemaPanel() {
           <h2 className="font-heading font-bold text-[15px] text-foreground">Request Schema</h2>
           <InfoTooltip content="Define the fields expected in the request body. PM can edit the schema; changes bump the contract version and notify all project members via email." />
         </div>
-        {isPM && dirty && (
-          <button
-            onClick={handleSave}
-            disabled={mutation.isPending}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl
-              bg-brand-primary text-white text-[12px] font-semibold
-              hover:opacity-90 disabled:opacity-50 transition-all duration-150"
-          >
-            <FaSave size={10} />
-            {mutation.isPending ? 'Saving…' : 'Save'}
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          {/* Export */}
+          {fields.length > 0 && (
+            <button
+              onClick={handleExportSchema}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-border
+                text-muted-foreground text-[11px] font-medium
+                hover:text-foreground hover:bg-bg-surface transition-all duration-150"
+            >
+              <FaDownload size={9} />
+              Export
+            </button>
+          )}
+
+          {/* Import (PM only) */}
+          {isPM && (
+            <>
+              <button
+                onClick={() => fileRef.current?.click()}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-border
+                  text-muted-foreground text-[11px] font-medium
+                  hover:text-brand-primary hover:bg-brand-primary/8 transition-all duration-150"
+              >
+                <FaFileImport size={9} />
+                Import
+              </button>
+              <input ref={fileRef} type="file" accept=".json,application/json" onChange={handleImportSchema} className="hidden" />
+            </>
+          )}
+
+          {/* Save */}
+          {isPM && dirty && (
+            <button
+              onClick={handleSave}
+              disabled={mutation.isPending}
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl
+                bg-brand-primary text-white text-[12px] font-semibold
+                hover:opacity-90 disabled:opacity-50 transition-all duration-150"
+            >
+              <FaSave size={10} />
+              {mutation.isPending ? 'Saving…' : 'Save'}
+            </button>
+          )}
+        </div>
       </div>
 
       <p className="text-[12px] text-muted-foreground/60 mb-5">

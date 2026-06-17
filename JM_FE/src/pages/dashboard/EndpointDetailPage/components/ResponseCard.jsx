@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AnimatePresence, motion } from 'framer-motion'
 import toast from 'react-hot-toast'
-import { FaEdit, FaStar, FaTrash, FaPlay, FaCheck } from 'react-icons/fa'
+import { FaEdit, FaStar, FaTrash, FaPlay, FaCheck, FaDownload } from 'react-icons/fa'
+import { downloadJson } from '@/shared/utils/jsonImportExport'
 import { setDefaultResponse, deleteResponse } from '@/features/response/services/responseService'
 import { upsertToggle } from '@/features/toggle/services/toggleService'
 import { useProjectCtx } from '@/pages/dashboard/ProjectDetailPage/context'
@@ -115,6 +116,17 @@ export default function ResponseCard({ response, activeResponseId }) {
 
           {/* Actions */}
           <div className="shrink-0 flex items-center gap-1">
+            {/* Export body as JSON */}
+            <button
+              onClick={() => downloadJson(response.body, `response-${response.statusCode}.json`)}
+              title="Export body as JSON"
+              className="w-7 h-7 flex items-center justify-center rounded-lg
+                text-muted-foreground/60 hover:text-brand-primary hover:bg-brand-primary/8
+                transition-all duration-150"
+            >
+              <FaDownload size={10} />
+            </button>
+
             {/* Activate toggle (semua role) */}
             {!isActive && (
               <button
