@@ -13,6 +13,7 @@ dist-ssr
 *.local
 .env
 DEV_NOTES.md
+MVP.md
 
 # Editor directories and files
 .vscode/*
